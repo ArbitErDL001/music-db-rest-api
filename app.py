@@ -102,3 +102,14 @@ def update_song(id):
     db.commit()
 
     return jsonify({"message": "Song updated successfully"})
+
+# ---------------- DELETE SONG ----------------
+@app.route("/songs/<int:id>", methods=["DELETE"])
+def delete_song(id):
+    db = get_db()
+    cursor = db.cursor()
+
+    cursor.execute("DELETE FROM songs WHERE id=%s", (id,))
+    db.commit()
+
+    return jsonify({"message": "Song deleted successfully"})
