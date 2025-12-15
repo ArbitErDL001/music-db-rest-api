@@ -9,6 +9,24 @@ load_dotenv()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 
+# ---------------- REGISTER ----------------
+@app.route("/register", methods=["POST"])
+def register():
+    data = request.get_json()  # safer than request.json
+    if not data or "username" not in data or "password" not in data:
+        return {"error": "Username and password are required"}, 400
+    username = data["username"]
+    password = data["password"]
+
+#---------------- LOGIN----------------
+@app.route("/login", methods=["POST"])
+def login():
+    data = request.get_json()
+    if not data or "username" not in data or "password" not in data:
+        return {"error": "Username and password are required"}, 400
+    username = data["username"]
+    password = data["password"]
+    
 # ---------------- DATABASE CONNECTION ----------------
 def get_db():
     return mysql.connector.connect(
@@ -117,3 +135,6 @@ def delete_song(id):
 # ---------------- RUN SERVER ----------------
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+
