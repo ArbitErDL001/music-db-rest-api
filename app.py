@@ -47,3 +47,21 @@ def create_song():
     db.commit()
 
     return jsonify({"message": "Song added successfully"}), 201
+
+# ---------------- READ ALL SONGS ----------------
+@app.route("/songs", methods=["GET"])
+def get_songs():
+    output_format = request.args.get("format", "json")
+
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM songs")
+    songs = cursor.fetchall()
+
+    if output_format == "xml":
+        xml_data = dict_to_xml(songs)
+        response = make_response(xml_data)
+        response.headers["Content-Type"] = "application/xml"
+        return response
+
+    return jsonify(songs)
