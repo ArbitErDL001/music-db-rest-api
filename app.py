@@ -65,3 +65,17 @@ def get_songs():
         return response
 
     return jsonify(songs)
+
+# ---------------- READ ONE SONG ----------------
+@app.route("/songs/<int:id>", methods=["GET"])
+def get_song(id):
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM songs WHERE id = %s", (id,))
+    song = cursor.fetchone()
+
+    if not song:
+        return jsonify({"error": "Song not found"}), 404
+
+    return jsonify(song)
