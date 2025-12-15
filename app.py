@@ -79,3 +79,26 @@ def get_song(id):
         return jsonify({"error": "Song not found"}), 404
 
     return jsonify(song)
+
+# ---------------- UPDATE SONG ----------------
+@app.route("/songs/<int:id>", methods=["PUT"])
+def update_song(id):
+    data = request.json
+    db = get_db()
+    cursor = db.cursor()
+
+    sql = """
+    UPDATE songs
+    SET title=%s, artist=%s, genre=%s, year=%s
+    WHERE id=%s
+    """
+    cursor.execute(sql, (
+        data["title"],
+        data["artist"],
+        data.get("genre"),
+        data.get("year"),
+        id
+    ))
+    db.commit()
+
+    return jsonify({"message": "Song updated successfully"})
