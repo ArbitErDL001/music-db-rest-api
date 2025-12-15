@@ -17,3 +17,12 @@ def get_db():
         password=os.getenv("DB_PASSWORD"),
         database=os.getenv("DB_NAME")
     )
+
+# ---------------- XML FORMATTER ----------------
+def dict_to_xml(data):
+    root = ET.Element("songs")
+    for item in data:
+        song = ET.SubElement(root, "song")
+        for key, value in item.items():
+            ET.SubElement(song, key).text = str(value)
+    return ET.tostring(root)
