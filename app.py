@@ -26,3 +26,24 @@ def dict_to_xml(data):
         for key, value in item.items():
             ET.SubElement(song, key).text = str(value)
     return ET.tostring(root)
+
+# ---------------- CREATE SONG ----------------
+@app.route("/songs", methods=["POST"])
+def create_song():
+    data = request.json
+    db = get_db()
+    cursor = db.cursor()
+
+    sql = """
+    INSERT INTO songs (title, artist, genre, year)
+    VALUES (%s, %s, %s, %s)
+    """
+    cursor.execute(sql, (
+        data["title"],
+        data["artist"],
+        data.get("genre"),
+        data.get("year")
+    ))
+    db.commit()
+
+    return jsonify({"message": "Song added successfully"}), 201
