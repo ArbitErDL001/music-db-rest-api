@@ -113,3 +113,7 @@ def delete_song(id):
     db.commit()
 
     return jsonify({"message": "Song deleted successfully"})
+
+# ---------------- RUN SERVER ----------------
+if __name__ == "__main__":
+    app.run(debug=True)
